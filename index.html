@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <title>Rina Web App</title>
+  </head>
+
+  <body style="background-color: rgb(233, 245, 255);">
+    <div class="max-w-sm mx-auto">
+      <br><br>
+      <video id="video" width="300" height="300" autoplay></video>
+      <br><br>
+    </div>
+
+    <div class="max-w-sm mx-auto">
+      <br><br>
+      <p id="result" class="text-gray-800 font-medium"></p>
+    </div>
+
+    <script>
+      startPrediction()
+      let video = document.getElementById('video');
+
+      async function startPrediction() {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+
+        var model = await tf.loadGraphModel('./model.json');
+
+        predictLoop(model);
+      }
+
+      async function predictLoop(model) {
+        let example = tf.browser.fromPixels(video, 3).cast('float32');
+        example = example.reshape([1, example.shape[0], example.shape[1], example.shape[2]]);
+
+        let prediction = await model.predict(example);
+        let class_scores = await prediction.data();
+        let max_score_id = class_scores.indexOf(Math.max(...class_scores));
+        let classes = ["Pattern", "Solid"];
+
+        document.getElementById("result").innerHTML = classes[max_score_id].toString();
+
+        requestAnimationFrame(() => predictLoop(model));
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  </body>
+</html>
