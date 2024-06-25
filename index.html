@@ -8,13 +8,13 @@
   <body style="background-color: rgb(233, 245, 255);">
     <div class="max-w-sm mx-auto">
       <br><br>
-      <video id="video" width="300" height="300" autoplay></video>
+      <video id="video" width="640" height="420" autoplay class="text-center"></video>
       <br><br>
     </div>
 
     <div class="max-w-sm mx-auto">
       <br><br>
-      <p id="result" class="text-gray-800 font-medium"></p>
+      <p id="result" class="text-gray-800 font-medium text-9xl text-green-500 text-center"></p>
     </div>
 
     <script>
@@ -28,6 +28,7 @@
         var model = await tf.loadGraphModel('./model.json');
 
         predictLoop(model);
+        setInterval(() => predictLoop(model), 100);
       }
 
       async function predictLoop(model) {
@@ -40,8 +41,6 @@
         let classes = ["Pattern", "Solid"];
 
         document.getElementById("result").innerHTML = classes[max_score_id].toString();
-
-        requestAnimationFrame(() => predictLoop(model));
       }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
