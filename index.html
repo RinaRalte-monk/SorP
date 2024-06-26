@@ -18,17 +18,17 @@
     </div>
 
     <script>
-      startPrediction()
+      startStream()
       let video = document.getElementById('video');
 
-      async function startPrediction() {
+      async function startStream() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         video.srcObject = stream;
 
         var model = await tf.loadGraphModel('./model.json');
 
-        predictLoop(model);
-        setInterval(() => predictLoop(model), 100);
+        predict(model);
+        setInterval(() => predict(model), 100);
       }
 
       async function predictLoop(model) {
