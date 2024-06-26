@@ -18,31 +18,37 @@
     </div>
 
     <script>
-      startStream()
-      let video = document.getElementById('video');
+  startStream();
 
-      async function startStream() {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
+  async function startStream() {
+    console.log("strimming")
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    video.srcObject = stream;
 
-        var model = await tf.loadGraphModel('./model.json');
+    try {
+      model = await tf.loadGraphModel('./model.json');
+      console.log('Model loaded');
 
-        predict(model);
-        setInterval(() => predict(model), 100);
-      }
+      predict();
+    } catch (error) {
+      console.log("model not loaded")
+    }
+  }
 
-      async function predict(model) {
-        let example = tf.browser.fromPixels(video, 3).cast('float32');
-        example = example.reshape([1, example.shape[0], example.shape[1], example.shape[2]]);
+  async function predict() {
+    let example = tf.browser.fromPixels(video, 3).cast('float32');
+    example = example.reshape([1, example.shape[0], example.shape[1], example.shape[2]]);
 
-        let prediction = await model.predict(example);
-        let class_scores = await prediction.data();
-        let max_score_id = class_scores.indexOf(Math.max(...class_scores));
-        let classes = ["Pattern", "Solid"];
+    let prediction = await model.predict(example);
+    let class_scores = await prediction.data();
+    let max_score_id = class_scores.indexOf(Math.max(...class_scores));
+    let classes = ['Pattern', 'Solid'];
 
-        document.getElementById("result").innerHTML = classes[max_score_id].toString();
-      }
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-  </body>
+    document.getElementById('result').textContent = classes[max_score_id];
+
+    requestAnimationFrame(predict);
+  }
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    </body>
 </html>
