@@ -31,7 +31,7 @@
         setInterval(() => predict(model), 100);
       }
 
-      async function predictLoop(model) {
+      async function predict(model) {
         let example = tf.browser.fromPixels(video, 3).cast('float32');
         example = example.reshape([1, example.shape[0], example.shape[1], example.shape[2]]);
 

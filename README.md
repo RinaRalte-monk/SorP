@@ -5,9 +5,9 @@ AI tells you if your clothe have Patter or not
 <br>click link to run
 <br>https://rinaralte-monk.github.io/SorP/
 
-### A look into index.html👍
+### A look into the index👍
 
-the index compromise of html and flowbite and javascript/tensorflow.js library
+the index compromises of html with flowbite library and javascript with tensorflow.js library
 
 - include tensorflow.js library
 
@@ -28,7 +28,7 @@ the index compromise of html and flowbite and javascript/tensorflow.js library
 ### JS script Breakdown👍
 
 
-- startStream() starts the webcam
+- startStream() starts the webcam then call the predict() func
 <br> video <- stores the where you gonna display video
 <br> stream <- awaits user allow cam then stores the stream object
 <br> vides <- pass the stream
@@ -53,6 +53,7 @@ the index compromise of html and flowbite and javascript/tensorflow.js library
 ```
 
 <br>
+
 - predict() function predicts solid or pattern
 <br> example <- catch the video, then it is reshaped
 <br> use the model we load from before to run the ai
